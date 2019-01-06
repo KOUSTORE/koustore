@@ -1,0 +1,71 @@
+@NgModule({
+  declarations: [
+    MyApp
+  ],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(MyApp)
+  ],
+  bootstrap: [IonicApp],
+  entryComponents: [
+    MyApp
+  ],
+  providers: [
+    StatusBar,
+    SplashScreen,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthService
+  ]
+})
+export class AppModule {}
+
+
+import { Component } from '@angular/core';
+import { Platform } from 'ionic-angular';
+import { StatusBar } from 'ionic-native';
+import { SplashScreen } from '@ionic-native/splash-screen';
+ 
+@Component({
+  templateUrl: 'app.html'
+})
+export class MyApp {
+  rootPage:any = 'LoginPage';
+ 
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+    platform.ready().then(() => {
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
+      statusBar.styleDefault();
+      splashScreen.hide();
+    });
+  }
+}  public login(credentials) {
+    if (credentials.email === null || credentials.password === null) {
+      return Observable.throw("Please insert credentials");
+    } else {
+      return Observable.create(observer => {
+        // At this point make a request to your backend to make a real check!
+        let access = (credentials.password === "pass" && credentials.email === "email");
+        this.currentUser = new User('Simon', 'saimon@devdactic.com');
+        observer.next(access);
+        observer.complete();
+      });
+    }
+  }
+ 
+  public register(credentials) {
+    if (credentials.email === null || credentials.password === null) {
+      return Observable.throw("Please insert credentials");
+    } else {
+      // At this point store the credentials to your backend!
+      return Observable.create(observer => {
+        observer.next(true);
+        observer.complete();
+      });
+    }
+  }
+ 
+  public getUserInfo() : User {
+    return this.currentUser;
+  }
+ 
